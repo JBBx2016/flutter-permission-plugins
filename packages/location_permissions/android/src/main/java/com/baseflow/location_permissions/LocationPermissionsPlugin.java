@@ -159,7 +159,7 @@ public class LocationPermissionsPlugin implements MethodCallHandler, StreamHandl
         }
 
         mResult = result;
-        requestPermissions();
+        requestPermissions((int) call.arguments);
         break;
       case "shouldShowRequestPermissionRationale":
         final Activity activity = mRegistrar.activity();
@@ -245,7 +245,7 @@ public class LocationPermissionsPlugin implements MethodCallHandler, StreamHandl
     return isLocationServiceEnabled(context) ? SERVICE_STATUS_ENABLED : SERVICE_STATUS_DISABLED;
   }
 
-  private void requestPermissions() {
+  private void requestPermissions(@LocationPermissionLevel int locationPermissionLevel) {
     final Activity activity = mRegistrar.activity();
 
     if (activity == null) {
@@ -254,8 +254,6 @@ public class LocationPermissionsPlugin implements MethodCallHandler, StreamHandl
       processResult(PERMISSION_STATUS_UNKNOWN);
       return;
     }
-
-    final int locationPermissionLevel = PERMISSION_LEVEL_LOCATION;
 
     @PermissionStatus final int permissionStatus = checkPermissionStatus(activity, locationPermissionLevel);
     if (permissionStatus != PERMISSION_STATUS_GRANTED) {
